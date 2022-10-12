@@ -1,10 +1,5 @@
 from enum import Enum, auto
 
-class Commodity:
-    def __init__(self, id: int, name: str):
-        self.id = id
-        self.__name = name
-    
 class CommodityGroup(Enum):
     CORN = auto()
     BARLEY = auto()
@@ -19,3 +14,8 @@ class CommodityGroup(Enum):
     PROCESSED_FEEDS = auto()
     ENERGY_FEEDS = auto()
     OTHER = auto()
+
+class Commodity:
+    def __init__(self, group:CommodityGroup, id: int, name: str):
+        self.id = id
+        self.__name = name
