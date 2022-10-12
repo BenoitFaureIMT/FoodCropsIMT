@@ -1,7 +1,7 @@
 from enum import Enum, auto
 
 class Indicator:
-    def __init__(self,id: str,frequency: int,frequencyDesc: str,geogLocation: str):
+    def __init__(self, id: str, frequency: int, frequencyDesc: str, geogLocation: str):
         self.id = id
         self.__frequency = frequency
         self.__frequencyDesc = frequencyDesc
