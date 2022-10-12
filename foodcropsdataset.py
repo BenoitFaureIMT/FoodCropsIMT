@@ -1,3 +1,5 @@
+from foodCropFactory import FoodCropFactory
+
 import pandas as pd
 
 class FoodCropsDataset(FoodCropFactory):
@@ -6,3 +8,4 @@ class FoodCropsDataset(FoodCropFactory):
     
     def load(self, datasetPath:str):
         return pd.read_csv(datasetPath)
+    
