@@ -1,19 +1,19 @@
-from enum import Enum, auto
+from enum import Enum
 
 class CommodityGroup(Enum):
-    CORN = auto()
-    BARLEY = auto()
-    OATS = auto()
-    SORGHUM = auto()
-    BYPRODUCT_FEEDS = auto()
-    COARSE_GRAINS = auto()
-    HAY = auto()
-    FEED_GRAINS = auto()
-    ANIMAL_PROTEIN_FEEDS = auto()
-    GRAIN_PROTEIN_FEEDS = auto()
-    PROCESSED_FEEDS = auto()
-    ENERGY_FEEDS = auto()
-    OTHER = auto()
+    CORN = 12
+    BARLEY = 9
+    OATS = 17
+    SORGHUM = 20
+    BYPRODUCT_FEEDS = 10
+    COARSE_GRAINS = 11
+    HAY = 16
+    FEED_GRAINS = 14
+    ANIMAL_PROTEIN_FEEDS = 8
+    GRAIN_PROTEIN_FEEDS = 15
+    PROCESSED_FEEDS = 19
+    ENERGY_FEEDS = 13
+    OTHER = 18
 
 class Commodity:
     def __init__(self, group:CommodityGroup, id: int, name: str):

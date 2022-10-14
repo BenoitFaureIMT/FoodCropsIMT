@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 
 class Indicator:
     def __init__(self, id: str, frequency: int, frequencyDesc: str, geogLocation: str):
@@ -8,9 +8,9 @@ class Indicator:
         self.__geogLocation = geogLocation
 
 class IndicatorGroup(Enum):
-    EXPORTS_AND_IMPORTS = auto()
-    SUPPLY_AND_USE = auto()
-    PRICES = auto()
-    FEED_PRICE_FED = auto()
-    TRANSPORTATION = auto()
-    ANIMAL_UNIT_INDEXES = auto()
+    EXPORTS_AND_IMPORTS = 3
+    SUPPLY_AND_USE = 2
+    PRICES = 1
+    FEED_PRICE_FED = 7
+    TRANSPORTATION = 4
+    ANIMAL_UNIT_INDEXES = 5
