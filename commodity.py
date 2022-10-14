@@ -16,6 +16,10 @@ class CommodityGroup(Enum):
     OTHER = 18
 
 class Commodity:
-    def __init__(self, group:CommodityGroup, id: int, name: str):
+    def __init__(self,group: CommodityGroup, id: int, name: str):
         self.id = id
         self.__name = name
+        self.group = group
+
+
+
