@@ -19,7 +19,7 @@ class FoodCropsDataset(FoodCropFactory):
         self.__locationMeasurementIndex = {}
         self.__unitMeasurementIndex = {}
 
-        self.__measurments = {}
+        self.__measurments = []
 
     def load(self, datasetPath: str):
         dataset = pd.read_csv(datasetPath)
@@ -128,5 +128,22 @@ class FoodCropsDataset(FoodCropFactory):
         return None
 
     def findMeasurement(self, commodityGroup: CommodityGroup= None, indicatorGroup: IndicatorGroup = None, geographicalLocation: str = None, unit: Unit = None) -> List[Measurement]:
-        return None
+        possibilities = [self.__commodityGroupMeasurementIndex[commodityGroup], self.__indicatorGroupMeasurementIndex[indicatorGroup],
+        self.__locationMeasurementIndex[geographicalLocation], self.__unitMeasurementIndex[unit]]
 
+        minInd = 0
+        for i in range(1, len(possibilities)):
+            if possibilities[i] is None:
+                pass
+            if possibilities[minInd] is None or len(possibilities[minInd]) > len(possibilities[i]):
+                minInd = i
+        
+        hold = {}
+        if possibilities[minInd] is None:
+            hold = self.__measurments
+        else:
+            for i in possibilities[minInd]:
+                if all([j == minInd or possibilities[j] is None or i in possibilities[j] for j in range(len(possibilities))]):
+                    hold[i] = self.__measurments[i]
+        
+        return hold
