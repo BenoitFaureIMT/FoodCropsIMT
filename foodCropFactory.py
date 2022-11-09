@@ -1,5 +1,5 @@
 from measurement import Measurement
-from units import Unit, Weight, Volume, Price, Surface, Count, Ratio
+from units import Unit, Weight, Volume, Price, Surface, Count, Ratio, UnitRatio
 from commodity import CommodityGroup, Commodity
 from indicator import IndicatorGroup, Indicator
 
@@ -10,34 +10,39 @@ class FoodCropFactory:
         self.indicatorsRegistry = []
         self.commodityRegistry = []
 
-    def createVolume(self, id: int) -> Unit:
+    def createVolume(self, id: int, name:str) -> Unit:
         if id not in self.unitsRegistry:
-            self.unitsRegistry[id] = Volume(id)
+            self.unitsRegistry[id] = Volume(id, name)
         return self.unitsRegistry[id]
 
-    def createPrice(self, id: int) -> Unit:
+    def createPrice(self, id: int, name:str) -> Unit:
         if id not in self.unitsRegistry:
-            self.unitsRegistry[id] = Price(id)
+            self.unitsRegistry[id] = Price(id, name)
         return self.unitsRegistry[id]
 
-    def createWeight(self, id: int, weight: float) -> Unit:
+    def createWeight(self, id: int, weight: float, name:str) -> Unit:
         if id not in self.unitsRegistry:
-            self.unitsRegistry[id] = Weight(id, weight)
+            self.unitsRegistry[id] = Weight(id, weight, name)
         return self.unitsRegistry[id]
 
-    def createSurface(self, id: int) -> Unit:
+    def createSurface(self, id: int, name:str) -> Unit:
         if id not in self.unitsRegistry:
-            self.unitsRegistry[id] = Surface(id)
+            self.unitsRegistry[id] = Surface(id, name)
         return self.unitsRegistry[id]
 
-    def createCount(self, id: int, what: str) -> Unit:
+    def createCount(self, id: int, what: str, name:str) -> Unit:
         if id not in self.unitsRegistry:
-            self.unitsRegistry[id] = Count(id, what)
+            self.unitsRegistry[id] = Count(id, what, name)
         return self.unitsRegistry[id]
 
-    def createRatio(self, id: int) -> Unit:
+    def createRatio(self, id: int, name:str) -> Unit:
         if id not in self.unitsRegistry:
-            self.unitsRegistry[id] = Ratio(id)
+            self.unitsRegistry[id] = Ratio(id, name)
+        return self.unitsRegistry[id]
+    
+    def createUnitRatio(self, id: int, unit1:Unit, unit2:Unit, name:str):
+        if id not in self.unitsRegistry:
+            self.unitsRegistry[id] = UnitRatio(id, unit1, unit2, name)
         return self.unitsRegistry[id]
 
     def createCommodity(self, group: CommodityGroup, id: int, name: str) -> Commodity:
