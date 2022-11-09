@@ -1,7 +1,8 @@
 from commodity import Commodity
+from descriptable import Descripable
 from indicator import Indicator
 
-class Measurement:
+class Measurement(Descripable):
     def __init__(self, year: int, value: float, timeperiodId: int, timeperiodDesc: str, commodity: Commodity, indicator: Indicator):
         self.__year = year
         self.__value = value
@@ -10,3 +11,7 @@ class Measurement:
         self.commodity = commodity
         self.indicator = indicator
 
+    def describe(self):
+        print("Measurement | ", self.__year, " ", self.__timeperiodDesc, " ", self.__timeperiodld, " | ", self.__value)
+        self.commodity.describe()
+        self.indicator.describe()

@@ -1,5 +1,7 @@
 from enum import Enum
 
+from descriptable import Descripable
+
 class CommodityGroup(Enum):
     CORN = 12
     BARLEY = 9
@@ -15,11 +17,14 @@ class CommodityGroup(Enum):
     ENERGY_FEEDS = 13
     OTHER = 18
 
-class Commodity:
+class Commodity(Descripable):
     def __init__(self,group: CommodityGroup, id: int, name: str):
         self.id = id
         self.__name = name
         self.group = group
+    
+    def describe(self):
+        print(self.group, " | ", self.__name, " ", self.id)
 
 
 
