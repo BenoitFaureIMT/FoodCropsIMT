@@ -14,11 +14,19 @@ class FoodCropsDataset(FoodCropFactory):
     def __init__(self):
         super().__init__()
 
+        self.__commodityGroupMeasurementIndex = {}
+        self.__indicatorGroupMeasurementIndex = {}
+        self.__locationMeasurementIndex = {}
+        self.__unitMeasurementIndex = {}
+
+        self.__measurments = {}
+
     def load(self, datasetPath: str):
         dataset = pd.read_csv(datasetPath)
 
         for index, row in dataset.iterrows():
             
+            # Read row's columns
             SC_Group_ID = row.get("SC_Group_ID")
             SC_Group_Desc = row.get("SC_Group_Desc")
             SC_GroupCommod_ID = row.get("SC_GroupCommod_ID")
@@ -39,14 +47,41 @@ class FoodCropsDataset(FoodCropFactory):
             Timeperiod_Desc = row.get("Timeperiod_Desc")
             Amount = row.get("Amount")
 
+            #Declare indexes
+            commodIndex = CommodityGroup[SC_Commodity_Desc]
+            indicatorIndex = IndicatorGroup[SC_Group_Desc]
+            locationIndex = SC_GeographyIndented_Desc
+
             # Create commodity
-            comod = super.createCommodity(CommodityGroup[SC_Commodity_Desc], SC_Commodity_ID, SC_Commodity_Desc)
+            comod = super.createCommodity(commodIndex, SC_Commodity_ID, SC_Commodity_Desc)
             # Create unit
             unit = self.__getUnit(SC_Unit_ID, SC_Unit_Desc)
-            #Create Indicator
-            indic = super.createIndicator(SC_Attribute_ID, SC_Frequency_ID, SC_Frequency_Desc, SC_GeographyIndented_Desc, IndicatorGroup[SC_Group_Desc], unit)
+            # Create Indicator
+            indic = super.createIndicator(SC_Attribute_ID, SC_Frequency_ID, SC_Frequency_Desc, locationIndex, indicatorIndex, unit)
 
-            super.createMeasurement(index, Year_ID, Amount, Timeperiod_ID,Timeperiod_Desc, comod, indic)
+            # Store measurements
+            self.__measurments[index] = super.createMeasurement(index, Year_ID, Amount, Timeperiod_ID,Timeperiod_Desc, comod, indic)
+
+            # Index measurements
+            if commodIndex in self.__commodityGroupMeasurementIndex:
+                self.__commodityGroupMeasurementIndex[commodIndex].append(index)
+            else:
+                self.__commodityGroupMeasurementIndex[commodIndex] = [index]
+
+            if indicatorIndex in self.__indicatorGroupMeasurementIndex:
+                self.__indicatorGroupMeasurementIndex[indicatorIndex].append(index)
+            else:
+                self.__indicatorGroupMeasurementIndex[indicatorIndex] = [index]
+
+            if locationIndex in self.__locationMeasurementIndex:
+                self.__locationMeasurementIndex[locationIndex].append(index)
+            else:
+                self.__locationMeasurementIndex[locationIndex] = [index]
+            
+            if unit in self.__unitMeasurementIndex:
+                self.__unitMeasurementIndex[unit].append(index)
+            else:
+                self.__unitMeasurementIndex[unit] = [index]
 
     def __getUnit(self, unitID:int, unitName:str):
         
