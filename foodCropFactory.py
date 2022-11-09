@@ -45,10 +45,10 @@ class FoodCropFactory:
             self.commodityRegistry[id] = Commodity(group, id, name)
         return self.commodityRegistry[id]
 
-    def createIndicator(self, id: int, frequency: int, fredDesc: str, geogLocation: str, indicatorGroup: IndicatorGroup,
+    def createIndicator(self, id: int, frequency: int, freqDesc: str, geogLocation: str, indicatorGroup: IndicatorGroup,
                         unit: Unit) -> Indicator:
         if id not in self.indicatorsRegistry:
-            self.indicatorsRegistry[id] = Indicator(id, frequency, fredDesc, geogLocation, indicatorGroup, unit)
+            self.indicatorsRegistry[id] = Indicator(id, frequency, freqDesc, geogLocation, indicatorGroup, unit)
         return self.indicatorsRegistry[id]
 
     def createMeasurement(self, id: int, year: int, value: float, timepreriodId: int, timeperiodDesc: str,
