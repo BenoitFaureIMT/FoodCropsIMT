@@ -24,5 +24,5 @@ class Indicator(Descripable):
         self.unit = unit
     
     def describe(self):
-        print(self.indicatorGroup,  " | Indicator ", self.id, " | frequency ", self.__frequency, " ", self.__freqDesc, " | location ", self.__geogLocation, " | Unit:")
+        print(self.indicatorGroup,  " | Indicator #", self.id, ", frequency ", self.__frequency, " ", self.__freqDesc, ", location ", self.__geogLocation)
         self.unit.describe()

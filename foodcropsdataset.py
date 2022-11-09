@@ -159,6 +159,13 @@ class FoodCropsDataset(FoodCropFactory):
                     hold[i] = self.__measurments[i]
         
         return hold
+    
+    def displayMeasurments(self, dics:dict):
+        print("--------------Printing ", len(dics.values()), " values--------------")
+        for v in dics.values():
+            v.describe()
+            print()
+        print("----------------------DONE---------------------")
 
 f = FoodCropsDataset()
 f.load('FeedGrains.csv')

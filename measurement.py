@@ -13,6 +13,6 @@ class Measurement(Descripable):
         self.indicator = indicator
 
     def describe(self):
-        print(self.id, "Measurement | ", self.__year, " ", self.__timeperiodDesc, " ", self.__timeperiodld, " | ", self.__value)
+        print("Measurement #", self.id, " | Year: ", self.__year, ", Time period: ", self.__timeperiodDesc, " | Value: ", self.__value)
         self.commodity.describe()
         self.indicator.describe()

@@ -4,10 +4,10 @@ from descripable import Descripable
 class Unit(Descripable): 
     def __init__(self, id:int, name:str):
         self.id = id
-        self.name  = name
+        self.name = name
     
     def describe(self):
-        print(self.name, " | ", self.id)
+        print(self.name, " | Unit #", self.id)
 
 
 class Volume(Unit):
@@ -26,7 +26,7 @@ class Weight(Unit):
         self.__multiplier = multiplier
     
     def describe(self):
-        print(self.__multiplier, " ", self.name, " | ", self.id)
+        print(self.__multiplier, " ", self.name, " | Unit #", self.id)
 
 
 class Surface(Unit):
@@ -40,7 +40,7 @@ class Count(Unit):
         self.__what = what
     
     def describe(self):
-        print(self.__what, " ", self.name, " | ", self.id, " | ")
+        print(self.__what, " ", self.name, " | Unit #", self.id)
 
 
 class Ratio(Unit):
