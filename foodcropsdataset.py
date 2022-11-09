@@ -1,7 +1,13 @@
+from typing import List
+
+from commodity import CommodityGroup
 from foodCropFactory import FoodCropFactory
 
 import pandas as pd
 from foodCropFactory import FoodCropFactory
+from indicator import IndicatorGroup
+from measurement import Measurement
+from units import Unit
 
 
 class FoodCropsDataset(FoodCropFactory):
@@ -16,6 +22,10 @@ class FoodCropsDataset(FoodCropFactory):
         size = dataset.shape()
 
         for index, row in dataset.iterrows():
+
+    def findMeasurement(self, commodityGroup: CommodityGroup= None, indicatorGroup: IndicatorGroup = None, geographicalLocation: str = None, unit: Unit = None) -> List[Measurement]:
+        return None
+
 
 
 
