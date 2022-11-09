@@ -1,7 +1,9 @@
-import pandas as pd
-dataset = pd.read_csv('FeedGrains.csv')
 
-print(dataset.SC_Group_ID[707])
+volume = ['Carloads originated', '"1,000 liters"', 'Gallons', ]
+price = ['Index (1984=100)', ]
+weight = []
+surface = ['Million acres', '"1,000 acres"', '"1,000 hectare"',  ]
+count = []
+ratio = []
 
-for index, row in dataset.iterrows():
-    print(index)
+
