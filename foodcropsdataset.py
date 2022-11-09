@@ -146,7 +146,7 @@ class FoodCropsDataset(FoodCropFactory):
         minInd = 0
         for i in range(1, len(possibilities)):
             if possibilities[i] is None:
-                pass
+                continue
             if possibilities[minInd] is None or len(possibilities[minInd]) > len(possibilities[i]):
                 minInd = i
         
