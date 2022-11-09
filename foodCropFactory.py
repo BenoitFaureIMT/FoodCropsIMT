@@ -49,7 +49,7 @@ class FoodCropFactory:
                         unit: Unit) -> Indicator:
         if id not in self.indicatorsRegistry:
             self.indicatorsRegistry[id] = Indicator(id, frequency, fredDesc, geogLocation, indicatorGroup, unit)
-        return self.indicatorsRegistry
+        return self.indicatorsRegistry[id]
 
     def createMeasurement(self, id: int, year: int, value: float, timepreriodId: int, timeperiodDesc: str,
                           commodity: Commodity, indicator: Indicator) -> Measurement:
