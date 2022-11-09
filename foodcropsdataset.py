@@ -1,3 +1,5 @@
+import math
+
 from typing import List
 
 from commodity import CommodityGroup
@@ -7,7 +9,7 @@ import pandas as pd
 from foodCropFactory import FoodCropFactory
 from indicator import IndicatorGroup
 from measurement import Measurement
-from units import Unit
+from units import Unit, Weight, Volume, Price, Surface, Count, Ratio
 
 
 class FoodCropsDataset(FoodCropFactory):
@@ -19,7 +21,7 @@ class FoodCropsDataset(FoodCropFactory):
         self.__locationMeasurementIndex = {}
         self.__unitMeasurementIndex = {}
 
-        self.__measurments = []
+        self.__measurments = {}
 
     def load(self, datasetPath: str):
         dataset = pd.read_csv(datasetPath)
@@ -51,19 +53,19 @@ class FoodCropsDataset(FoodCropFactory):
             Amount = row.get("Amount")
 
             #Declare indexes
-            commodIndex = CommodityGroup(SC_GroupCommod_ID)
+            commodIndex = CommodityGroup["OTHER"] if math.isnan(SC_GroupCommod_ID) else CommodityGroup(SC_GroupCommod_ID)
             indicatorIndex = IndicatorGroup(SC_Group_ID)
             locationIndex = SC_GeographyIndented_Desc
 
             # Create commodity
-            comod = super().createCommodity(commodIndex, SC_Commodity_ID, SC_Commodity_Desc)
+            comod = self.createCommodity(commodIndex, SC_Commodity_ID, SC_Commodity_Desc)
             # Create unit
             unit = self.__getUnit(SC_Unit_ID, SC_Unit_Desc)
             # Create Indicator
-            indic = super().createIndicator(SC_Attribute_ID, SC_Frequency_ID, SC_Frequency_Desc, locationIndex, indicatorIndex, unit)
+            indic = self.createIndicator(SC_Attribute_ID, SC_Frequency_ID, SC_Frequency_Desc, locationIndex, indicatorIndex, unit)
 
             # Store measurements
-            self.__measurments[index] = super().createMeasurement(index, Year_ID, Amount, Timeperiod_ID,Timeperiod_Desc, comod, indic)
+            self.__measurments[index] = self.createMeasurement(index, Year_ID, Amount, Timeperiod_ID, Timeperiod_Desc, comod, indic)
 
             # Index measurements
             if commodIndex in self.__commodityGroupMeasurementIndex:
@@ -104,35 +106,35 @@ class FoodCropsDataset(FoodCropFactory):
 
         def getUnit_notReferenced(unitName_bis:str):
             if unitName_bis in volume:
-                return super.Volume(-1, unitName_bis)
+                return Volume(-1, unitName_bis)
             elif unitName_bis in price:
-                return super.Price(-1, unitName_bis)
+                return Price(-1, unitName_bis)
             elif unitName_bis in weight:
-                return super.Weight(-1, weight[unitName_bis].value, unitName_bis)
+                return Weight(-1, weight[unitName_bis], unitName_bis)
             elif unitName_bis in surface:
-                return super.Surface(-1, unitName_bis)
+                return Surface(-1, unitName_bis)
             elif unitName_bis in count:
-                return super.Count(-1, count[unitName_bis].value, unitName_bis)
+                return Count(-1, count[unitName_bis], unitName_bis)
             elif unitName_bis in ratio:
-                return super.Ratio(-1, unitName_bis)
-            return super.Unit(-1, "Unit not referenced")
+                return Ratio(-1, unitName_bis)
+            return Unit(-1, "Unit not referenced")
 
         if unitName in volume:
-            return super.createVolume(unitID, unitName)
+            return self.createVolume(unitID, unitName)
         elif unitName in price:
-            return super.createPrice(unitID, unitName)
+            return self.createPrice(unitID, unitName)
         elif unitName in weight:
-            return super.createWeight(unitID, weight[unitName].value, unitName)
+            return self.createWeight(unitID, weight[unitName], unitName)
         elif unitName in surface:
-            return super.createSurface(unitID, unitName)
+            return self.createSurface(unitID, unitName)
         elif unitName in count:
-            return super.createCount(unitID, count[unitName].value, unitName)
+            return self.createCount(unitID, count[unitName], unitName)
         elif unitName in ratio:
-            return super.createRatio(unitID, unitName)
+            return self.createRatio(unitID, unitName)
         elif unitName in ratioUnit:
-            unit1 = getUnit_notReferenced(ratioUnit[unitName].value[0])
-            unit2 = getUnit_notReferenced(ratioUnit[unitName].value[1])
-            return super.createUnitRatio(unitID, unit1, unit2, unitName)
+            unit1 = getUnit_notReferenced(ratioUnit[unitName][0])
+            unit2 = getUnit_notReferenced(ratioUnit[unitName][1])
+            return self.createUnitRatio(unitID, unit1, unit2, unitName)
         
         return None
 
@@ -159,4 +161,4 @@ class FoodCropsDataset(FoodCropFactory):
 
 f = FoodCropsDataset()
 f.load('FeedGrains.csv')
-f.findMeasurements()
+f.findMeasurement()

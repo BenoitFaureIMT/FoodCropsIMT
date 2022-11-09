@@ -10,6 +10,7 @@ class IndicatorGroup(Enum):
     FEED_PRICE_FED = 7
     TRANSPORTATION = 4
     ANIMAL_UNIT_INDEXES = 5
+    QUANTITIES_FED = 6
 
 
 class Indicator(Descripable):

@@ -58,5 +58,5 @@ class FoodCropFactory:
 
     def createMeasurement(self, id: int, year: int, value: float, timepreriodId: int, timeperiodDesc: str,
                           commodity: Commodity, indicator: Indicator) -> Measurement:
-        return Measurement(year, value, timepreriodId, timeperiodDesc, commodity, indicator)
+        return Measurement(id, year, value, timepreriodId, timeperiodDesc, commodity, indicator)
 
