@@ -23,6 +23,9 @@ class FoodCropsDataset(FoodCropFactory):
 
     def load(self, datasetPath: str):
         dataset = pd.read_csv(datasetPath)
+        #Progress bar
+        tot = dataset.shape[0]
+        width = 50
 
         for index, row in dataset.iterrows():
             
@@ -48,19 +51,19 @@ class FoodCropsDataset(FoodCropFactory):
             Amount = row.get("Amount")
 
             #Declare indexes
-            commodIndex = CommodityGroup[SC_Commodity_Desc]
-            indicatorIndex = IndicatorGroup[SC_Group_Desc]
+            commodIndex = CommodityGroup(SC_GroupCommod_ID)
+            indicatorIndex = IndicatorGroup(SC_Group_ID)
             locationIndex = SC_GeographyIndented_Desc
 
             # Create commodity
-            comod = super.createCommodity(commodIndex, SC_Commodity_ID, SC_Commodity_Desc)
+            comod = super().createCommodity(commodIndex, SC_Commodity_ID, SC_Commodity_Desc)
             # Create unit
             unit = self.__getUnit(SC_Unit_ID, SC_Unit_Desc)
             # Create Indicator
-            indic = super.createIndicator(SC_Attribute_ID, SC_Frequency_ID, SC_Frequency_Desc, locationIndex, indicatorIndex, unit)
+            indic = super().createIndicator(SC_Attribute_ID, SC_Frequency_ID, SC_Frequency_Desc, locationIndex, indicatorIndex, unit)
 
             # Store measurements
-            self.__measurments[index] = super.createMeasurement(index, Year_ID, Amount, Timeperiod_ID,Timeperiod_Desc, comod, indic)
+            self.__measurments[index] = super().createMeasurement(index, Year_ID, Amount, Timeperiod_ID,Timeperiod_Desc, comod, indic)
 
             # Index measurements
             if commodIndex in self.__commodityGroupMeasurementIndex:
@@ -82,6 +85,12 @@ class FoodCropsDataset(FoodCropFactory):
                 self.__unitMeasurementIndex[unit].append(index)
             else:
                 self.__unitMeasurementIndex[unit] = [index]
+
+            #Progress bar update
+            percent = 100.0*index/tot
+            left = width*percent/100
+            right = width-left
+            print("\r[", '*'*int(left), ' '*int(right), "]", round(percent), '%', sep="", end="", flush=True)
 
     def __getUnit(self, unitID:int, unitName:str):
         
@@ -147,3 +156,7 @@ class FoodCropsDataset(FoodCropFactory):
                     hold[i] = self.__measurments[i]
         
         return hold
+
+f = FoodCropsDataset()
+f.load('FeedGrains.csv')
+f.findMeasurements()

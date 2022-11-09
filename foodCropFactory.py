@@ -6,9 +6,9 @@ from indicator import IndicatorGroup, Indicator
 
 class FoodCropFactory:
     def __init__(self):
-        self.unitsRegistry = []
-        self.indicatorsRegistry = []
-        self.commodityRegistry = []
+        self.unitsRegistry = {}
+        self.indicatorsRegistry = {}
+        self.commodityRegistry = {}
 
     def createVolume(self, id: int, name:str) -> Unit:
         if id not in self.unitsRegistry:
