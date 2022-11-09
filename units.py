@@ -26,7 +26,7 @@ class Weight(Unit):
         self.__multiplier = multiplier
     
     def describe(self):
-        print(self.__multiplier, " ", self.name, " | Unit #", self.id)
+        print(self.name, " | Unit #", self.id, ", Scale ", self.__multiplier)
 
 
 class Surface(Unit):
