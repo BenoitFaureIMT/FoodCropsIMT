@@ -166,9 +166,3 @@ class FoodCropsDataset(FoodCropFactory):
             v.describe()
             print("-------")
         print("----------------------DONE---------------------")
-
-f = FoodCropsDataset()
-f.load('FeedGrains.csv')
-d = f.findMeasurement(commodityGroup = CommodityGroup["CORN"])
-for v in d.values():
-    v.describe()
