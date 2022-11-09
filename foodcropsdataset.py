@@ -169,6 +169,6 @@ class FoodCropsDataset(FoodCropFactory):
 
 f = FoodCropsDataset()
 f.load('FeedGrains.csv')
-d = f.findMeasurement(commodityGroup = CommodityGroup.CORN)
+d = f.findMeasurement(commodityGroup = CommodityGroup["CORN"])
 for v in d.values():
     v.describe()
