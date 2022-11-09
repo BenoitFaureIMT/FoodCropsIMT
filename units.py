@@ -1,5 +1,5 @@
 from abc import ABC
-from descriptable import Descripable
+from descripable import Descripable
 
 class Unit(Descripable): 
     def __init__(self, id:int, name:str):

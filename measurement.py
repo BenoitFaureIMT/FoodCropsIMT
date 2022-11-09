@@ -1,5 +1,5 @@
 from commodity import Commodity
-from descriptable import Descripable
+from descripable import Descripable
 from indicator import Indicator
 
 class Measurement(Descripable):

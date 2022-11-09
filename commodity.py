@@ -1,6 +1,6 @@
 from enum import Enum
 
-from descriptable import Descripable
+from descripable import Descripable
 
 class CommodityGroup(Enum):
     CORN = 12
