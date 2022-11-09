@@ -24,7 +24,7 @@ class Commodity(Descripable):
         self.group = group
     
     def describe(self):
-        print(self.__name, " | Commodity #", self.id, " subset of ", self.group)
+        print(self.__name, " | Commodity #", self.id, " subset of ", self.group.name)
 
 
 
