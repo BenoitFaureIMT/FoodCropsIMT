@@ -1,7 +1,8 @@
 from abc import ABC
 from descripable import Descripable
 
-class Unit(Descripable): 
+class Unit(Descripable):
+    # Constructeur de la classe Unit
     def __init__(self, id:int, name:str):
         self.id = id
         self.name = name
@@ -9,7 +10,7 @@ class Unit(Descripable):
     def describe(self):
         print(self.name, " | Unit #", self.id)
 
-
+# Sous classe de Unit permmettant de créer les différentes unités
 class Volume(Unit):
     def __init__(self, id:int, name:str = "Volumne"):
         super(Volume, self).__init__(id, name)

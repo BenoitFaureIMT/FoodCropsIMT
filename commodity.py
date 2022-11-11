@@ -2,6 +2,9 @@ from enum import Enum
 
 from descripable import Descripable
 
+
+# creation de la classe CommodityGroup qui est une énumération des différente commodity possible
+
 class CommodityGroup(Enum):
     CORN = 12
     BARLEY = 9
@@ -17,14 +20,13 @@ class CommodityGroup(Enum):
     ENERGY_FEEDS = 13
     OTHER = 18
 
+
 class Commodity(Descripable):
-    def __init__(self,group: CommodityGroup, id: int, name: str):
+    # Constructeur de la classe commodity
+    def __init__(self, group: CommodityGroup, id: int, name: str):
         self.id = id
         self.__name = name
         self.group = group
-    
+
     def describe(self):
         print(self.__name, " | Commodity #", self.id, " subset of ", self.group.name)
-
-
-
