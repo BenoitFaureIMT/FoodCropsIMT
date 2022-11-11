@@ -13,4 +13,4 @@ python main.py --dataset_path 'Localisation du dataset'
                --location_string 'Zone geographique'
                --unit_name 'Unite'
 ```
-Si vous n'indiquez pas le paramètre, la datset ne sera pas trié selon ce paramètre.
+Si vous n'indiquez pas un paramètre, la datset ne sera pas trié selon ce paramètre.
