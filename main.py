@@ -12,7 +12,7 @@ def parse_opt():
     parser.add_argument("--location_string", type = str, default = None, help = "location name")
     parser.add_argument("--list_locations", action='store_true', help = "print valid location names")
     parser.add_argument("--unit_id", type = int, default = None, help = "unit id")
-    parser.add_argument("--list_units", action='store_true', help = "print valid unit names")
+    parser.add_argument("--list_units", action='store_true', help = "print valid unit ids")
     opt = parser.parse_args()
     return opt
 
