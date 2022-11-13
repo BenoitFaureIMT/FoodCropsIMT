@@ -16,10 +16,8 @@ class FoodCropsDataset(FoodCropFactory):
     def __init__(self):
         super().__init__()
 
-        self.__commodityGroupMeasurementIndex = {}
-        self.__indicatorGroupMeasurementIndex = {}
         self.__locationMeasurementIndex = {}
-        self.__unitMeasurementIndex = {}
+        self.__allMeasurementsIndex = {}
 
         self.__measurments = {}
 
@@ -28,71 +26,74 @@ class FoodCropsDataset(FoodCropFactory):
         #Progress bar
         tot = dataset.shape[0]
         width = 50
+        mile_stone = 0
 
-        for index, row in dataset.iterrows():
+        
+        # Separate columns for faster access
+        SC_Group_ID = dataset["SC_Group_ID"]
+        # SC_Group_Desc = dataset["SC_Group_Desc"]
+        SC_GroupCommod_ID = dataset["SC_GroupCommod_ID"]
+        # SC_GroupCommod_Desc = dataset["SC_GroupCommod_Desc"]
+        # SC_Geography_ID = dataset["SC_Geography_ID"]
+        # SortOrder = dataset["SortOrder"]
+        SC_GeographyIndented_Desc = dataset["SC_GeographyIndented_Desc"]
+        SC_Commodity_ID = dataset["SC_Commodity_ID"]
+        SC_Commodity_Desc = dataset["SC_Commodity_Desc"]
+        SC_Attribute_ID = dataset["SC_Attribute_ID"]
+        # SC_Attribute_Desc = dataset["SC_Attribute_Desc"]
+        SC_Unit_ID = dataset["SC_Unit_ID"]
+        SC_Unit_Desc = dataset["SC_Unit_Desc"]
+        Year_ID = dataset["Year_ID"]
+        SC_Frequency_ID = dataset["SC_Frequency_ID"]
+        SC_Frequency_Desc = dataset["SC_Frequency_Desc"]
+        Timeperiod_ID = dataset["Timeperiod_ID"]
+        Timeperiod_Desc = dataset["Timeperiod_Desc"]
+        Amount = dataset["Amount"]
+
+        for index in dataset.index:
             
-            # Read row's columns
-            SC_Group_ID = row.get("SC_Group_ID")
-            # SC_Group_Desc = row.get("SC_Group_Desc")
-            SC_GroupCommod_ID = row.get("SC_GroupCommod_ID")
-            # SC_GroupCommod_Desc = row.get("SC_GroupCommod_Desc")
-            # SC_Geography_ID = row.get("SC_Geography_ID")
-            # SortOrder = row.get("SortOrder")
-            SC_GeographyIndented_Desc = row.get("SC_GeographyIndented_Desc")
-            SC_Commodity_ID = row.get("SC_Commodity_ID")
-            SC_Commodity_Desc = row.get("SC_Commodity_Desc")
-            SC_Attribute_ID = row.get("SC_Attribute_ID")
-            # SC_Attribute_Desc = row.get("SC_Attribute_Desc")
-            SC_Unit_ID = row.get("SC_Unit_ID")
-            SC_Unit_Desc = row.get("SC_Unit_Desc")
-            Year_ID = row.get("Year_ID")
-            SC_Frequency_ID = row.get("SC_Frequency_ID")
-            SC_Frequency_Desc = row.get("SC_Frequency_Desc")
-            Timeperiod_ID = row.get("Timeperiod_ID")
-            Timeperiod_Desc = row.get("Timeperiod_Desc")
-            Amount = row.get("Amount")
-
             #Declare indexes
-            commodIndex = CommodityGroup["OTHER"] if math.isnan(SC_GroupCommod_ID) else CommodityGroup(SC_GroupCommod_ID)
-            indicatorIndex = IndicatorGroup(SC_Group_ID)
-            locationIndex = SC_GeographyIndented_Desc
+            SC_GroupCommod_ID_h = SC_GroupCommod_ID[index]
+            commodIndex = CommodityGroup["OTHER"] if math.isnan(SC_GroupCommod_ID_h) else CommodityGroup(SC_GroupCommod_ID_h)
+            indicatorIndex = IndicatorGroup(SC_Group_ID[index])
+            locationIndex = SC_GeographyIndented_Desc[index].strip()
 
             # Create commodity
-            comod = self.createCommodity(commodIndex, SC_Commodity_ID, SC_Commodity_Desc)
+            comod = self.createCommodity(commodIndex, SC_Commodity_ID[index], SC_Commodity_Desc[index])
             # Create unit
-            unit = self.__getUnit(SC_Unit_ID, SC_Unit_Desc)
+            unit = self.__getUnit(SC_Unit_ID[index], SC_Unit_Desc[index])
             # Create Indicator
-            indic = self.createIndicator(SC_Attribute_ID, SC_Frequency_ID, SC_Frequency_Desc, locationIndex, indicatorIndex, unit)
-
+            indic = self.createIndicator(SC_Attribute_ID[index], SC_Frequency_ID[index], SC_Frequency_Desc[index], locationIndex, indicatorIndex, unit)
             # Store measurements
-            self.__measurments[index] = self.createMeasurement(index, Year_ID, Amount, Timeperiod_ID, Timeperiod_Desc, comod, indic)
+            self.__measurments[index] = self.createMeasurement(index, Year_ID[index], Amount[index], Timeperiod_ID[index], Timeperiod_Desc[index], comod, indic)
 
-            # Index measurements
-            if commodIndex in self.__commodityGroupMeasurementIndex:
-                self.__commodityGroupMeasurementIndex[commodIndex].append(index)
-            else:
-                self.__commodityGroupMeasurementIndex[commodIndex] = [index]
+            # Index measurements - using nested dictionaries
+            if not commodIndex in self.__allMeasurementsIndex:
+                self.__allMeasurementsIndex[commodIndex] = {}
 
-            if indicatorIndex in self.__indicatorGroupMeasurementIndex:
-                self.__indicatorGroupMeasurementIndex[indicatorIndex].append(index)
-            else:
-                self.__indicatorGroupMeasurementIndex[indicatorIndex] = [index]
+            if not indicatorIndex in self.__allMeasurementsIndex[commodIndex]:
+                self.__allMeasurementsIndex[commodIndex][indicatorIndex] = {}
+                
+            if not locationIndex in self.__allMeasurementsIndex[commodIndex][indicatorIndex]:
+                self.__allMeasurementsIndex[commodIndex][indicatorIndex][locationIndex] = {}
 
-            if locationIndex in self.__locationMeasurementIndex:
-                self.__locationMeasurementIndex[locationIndex].append(index)
+            if not unit in self.__allMeasurementsIndex[commodIndex][indicatorIndex][locationIndex]:
+                self.__allMeasurementsIndex[commodIndex][indicatorIndex][locationIndex][unit] = [index]
             else:
-                self.__locationMeasurementIndex[locationIndex] = [index]
-            
-            if unit in self.__unitMeasurementIndex:
-                self.__unitMeasurementIndex[unit].append(index)
-            else:
-                self.__unitMeasurementIndex[unit] = [index]
+                self.__allMeasurementsIndex[commodIndex][indicatorIndex][locationIndex][unit].append(index)
 
-            #Progress bar update
-            percent = 100.0*index/tot
-            left = width*percent/100
-            right = width-left
-            print("\r[", '*'*int(left), ' '*int(right), "]", round(percent), '%', sep="", end="", flush=True)
+            # Store locations
+            if not locationIndex in self.__locationMeasurementIndex:
+                self.__locationMeasurementIndex[locationIndex] = 0
+
+            percent = index/tot*100
+            if (percent > mile_stone):
+                #Progress bar update
+                left = width*percent/100
+                right = width-left
+                print("\r[", '*'*int(left), ' '*int(right), "]", round(percent), '%', sep="", end="", flush=True)
+                mile_stone += 1
+        
         print()
 
     def __getUnit(self, unitID:int, unitName:str):
@@ -140,29 +141,57 @@ class FoodCropsDataset(FoodCropFactory):
         return None
 
     def findMeasurement(self, commodityGroup: CommodityGroup= None, indicatorGroup: IndicatorGroup = None, geographicalLocation: str = None, unit: Unit = None) -> List[Measurement]:
-        possibilities = [self.__commodityGroupMeasurementIndex.get(commodityGroup), self.__indicatorGroupMeasurementIndex.get(indicatorGroup),
-        self.__locationMeasurementIndex.get(geographicalLocation), self.__unitMeasurementIndex.get(unit)]
-
-        minInd = 0
-        for i in range(1, len(possibilities)):
-            if possibilities[i] is None:
-                continue
-            if possibilities[minInd] is None or len(possibilities[minInd]) > len(possibilities[i]):
-                minInd = i
+        #Explore one or all dictionaries depending on the argument value
+        selected_dics = self.__exploreDics([self.__allMeasurementsIndex], commodityGroup)
+        selected_dics = self.__exploreDics(selected_dics, indicatorGroup)
+        selected_dics = self.__exploreDics(selected_dics, geographicalLocation)
+        selected_dics = self.__exploreDics(selected_dics, unit)
+        return list(map(self.__measurments.get, [i for s in selected_dics for i in s]))
         
-        hold = {}
-        if possibilities[minInd] is None:
-            hold = self.__measurments
-        else:
-            for i in possibilities[minInd]:
-                if all([j == minInd or possibilities[j] is None or i in possibilities[j] for j in range(len(possibilities))]):
-                    hold[i] = self.__measurments[i]
-        
-        return hold
+    def __exploreDics(self, dics, key):
+        h = []
+        for d in dics:
+            if key is None:
+                for v in d.values():
+                    h.append(v)
+            else:
+                v = d.get(key)
+                if not v is None:
+                    h.append(v)
+        return h
     
-    def displayMeasurments(self, dics:dict):
-        print("--------------Printing ", len(dics.values()), " values--------------")
-        for v in dics.values():
+    def locationExists(self, geographicalLocation: str):
+        if (not geographicalLocation is None) and self.__locationMeasurementIndex.get(geographicalLocation) is None:
+            return False
+        return True
+    
+    def display_location_names(self):
+        print("-------------Stored location names-------------")
+        for e in self.__locationMeasurementIndex.keys():
+            print(e)
+        print("----------------------DONE---------------------")
+    
+    def display_unit_names(self):
+        print("---------------Stored unit names---------------")
+        h = []
+        for e in self.unitsRegistry.keys():
+            h.append((self.unitsRegistry[e].name, e))
+
+        maxLen = 0
+        for e in h:
+            if len(e[0]) > maxLen:
+                maxLen = len(e[0])
+
+        off = (maxLen - len("NAME"))//2
+        off2 = maxLen - len("NAME") - off + 2
+        print(" " * off, "NAME", " " * off2, "ID")
+        for e in h:
+            print(e[0], " " * (maxLen - len(e[0]) + 3), e[1])
+        print("----------------------DONE---------------------")
+    
+    def displayMeasurments(self, measurments_list):
+        print("--------------Printing ", len(measurments_list), " values--------------")
+        for v in measurments_list:
             v.describe()
             print("-------")
         print("----------------------DONE---------------------")
