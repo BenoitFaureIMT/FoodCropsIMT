@@ -2,7 +2,7 @@ from enum import Enum
 from descripable import Descripable
 from units import Unit
 
-
+# creation de la classe IndicatorGroup qui est une énumération des différents indicator possible
 class IndicatorGroup(Enum):
     EXPORTS_AND_IMPORTS = 3
     SUPPLY_AND_USE = 2
@@ -14,6 +14,7 @@ class IndicatorGroup(Enum):
 
 
 class Indicator(Descripable):
+    # Constructeur de la classe Indicator
     def __init__(self, id: int, frequency: int, freqDesc: str, geogLocation: str, indicatorGroup: IndicatorGroup,
                  unit: Unit):
         self.id = id
